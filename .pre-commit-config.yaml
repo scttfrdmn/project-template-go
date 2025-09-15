@@ -1,0 +1,75 @@
+repos:
+  - repo: local
+    hooks:
+      # Format Go code
+      - id: go-fmt
+        name: Go Format
+        entry: gofmt
+        args: [-s, -w]
+        language: system
+        files: \.go$
+        pass_filenames: true
+
+      # Run go mod tidy
+      - id: go-mod-tidy
+        name: Go Mod Tidy
+        entry: go
+        args: [mod, tidy]
+        language: system
+        files: go\.(mod|sum)$
+        pass_filenames: false
+
+      # Run golangci-lint
+      - id: golangci-lint
+        name: golangci-lint
+        entry: golangci-lint
+        args: [run, --fix]
+        language: system
+        files: \.go$
+        pass_filenames: false
+
+      # Run go vet
+      - id: go-vet
+        name: Go Vet
+        entry: go
+        args: [vet, ./...]
+        language: system
+        files: \.go$
+        pass_filenames: false
+
+      # Run staticcheck
+      - id: staticcheck
+        name: Static Check
+        entry: staticcheck
+        args: [./...]
+        language: system
+        files: \.go$
+        pass_filenames: false
+
+      # Run gosec
+      - id: gosec
+        name: Go Security Check
+        entry: gosec
+        args: [./...]
+        language: system
+        files: \.go$
+        pass_filenames: false
+
+      # Run tests
+      - id: go-test
+        name: Go Test
+        entry: go
+        args: [test, -v, ./...]
+        language: system
+        files: \.go$
+        pass_filenames: false
+
+  # Generic hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+      - id: check-merge-conflict
